@@ -4,7 +4,11 @@ window.dom_items = [];
 
 function add_item(id, content){
 	var ky = 'todo_'+id;
-	window.todo_items[ky] = {"id": id, "status": 0, "content": content};
+	window.todo_items = JSON.parse(localStorage.getItem("todo_items"));
+    if(window.todo_items == null){
+        window.todo_items = [];
+    }
+    window.todo_items[ky] = {"id": id, "status": 0, "content": content};
     let new_list = JSON.stringify({ ...window.todo_items });
 	window.localStorage.setItem("todo_items", new_list);
     refresh_content();
@@ -77,15 +81,19 @@ function generate_item(id, status, content){
 }
 
 function refresh_content(){
-    var todo_html = "";
-    window.dom_items = [];
-    for (const [key, value] of Object.entries(window.todo_items)) {
-      todo_html += generate_item(value.id, value.status, value.content);
-      window.dom_items.push(value.id);
-      window.dom_items.push(value.status);
+    try {
+        var todo_html = "";
+        window.dom_items = [];
+        for (const [key, value] of Object.entries(window.todo_items)) {
+          todo_html += generate_item(value.id, value.status, value.content);
+          window.dom_items.push(value.id);
+          window.dom_items.push(value.status);
+        }
+        todo_list.style = "display:block;";
+        todo_list.innerHTML = todo_html;
+    } catch (e) {
+        // do nothing
     }
-    todo_list.style = "display:block;";
-    todo_list.innerHTML = todo_html;
 }
 
 (function(){
@@ -93,10 +101,8 @@ function refresh_content(){
 	// load items saved in localStorage
     try {
         window.todo_items = JSON.parse(localStorage.getItem("todo_items"));
-
-        window.loaded_items
     } catch (e) {
-        // do nothing
+        window.localStorage.setItem("todo_items", "[]");
     }
 
     // select form
@@ -116,9 +122,13 @@ function refresh_content(){
         try {
             window.todo_items = JSON.parse(localStorage.getItem("todo_items"));
             var tempo = [];
-            for (const [key, value] of Object.entries(window.todo_items)) {
-              tempo.push(value.id);
-              tempo.push(value.status);
+            try {
+                for (const [key, value] of Object.entries(window.todo_items)) {
+                  tempo.push(value.id);
+                  tempo.push(value.status);
+                }
+            } catch (e) {
+                // do nothing
             }
             window.loaded_items = tempo;
         } catch (e) {
@@ -141,7 +151,7 @@ function refresh_content(){
         // get the current todo task
         var todo_value = todo_task.value;
 
-        // generate random number
+        // generate random number ID
         var random_value = Math.floor(Math.random() * (99999999999 - 1111111 + 1)) + 1111111;
 
         if(todo_value.replace(/\s+/g, '') != ''){
