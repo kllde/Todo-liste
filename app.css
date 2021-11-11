@@ -1,0 +1,38 @@
+#todo_task{
+	color: #fff !important;
+}
+.btn-group .btn{
+	max-height: 38px !important;
+}
+#todo_list{
+    border-color: #272727 !important;
+}
+.app_name{
+	font-family: 'Luckiest Guy', cursive;
+	color: #63bbe2;
+}
+#todo_form input, #todo_form button, a.btn{
+	box-shadow: none;
+}
+#todo_form input:focus, #todo_form button:focus, a.btn:focus{
+	box-shadow: none;
+}
+.disabled{
+	opacity: 1 !important;
+}
+.done .card-title {
+    font-size: 1em;
+    color: #63bbe2;
+    padding-top: 3px;
+	font-style: italic;
+}
+.done .card-body {
+    padding: 2px 10px;
+}
+.done .btn-group .btn-primary{
+    display: none;
+}
+.done .btn-group .btn{
+    border-radius: 4px;
+	text-decoration: none !important;
+}
